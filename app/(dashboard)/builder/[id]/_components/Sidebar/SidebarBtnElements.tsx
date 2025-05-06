@@ -1,0 +1,54 @@
+import { FormElement } from '@/components/FormElements'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+import { useDraggable } from '@dnd-kit/core'
+
+export function SidebarBtnElements({
+  formElement,
+}: {
+  formElement: FormElement
+}) {
+  const { icon: Icon, label } = formElement.designerBtnElement
+
+  const draggable = useDraggable({
+    id: `designer-btn-${formElement.type}`,
+    data: {
+      type: formElement.type,
+      isDesignerBtnElement: true,
+    },
+  })
+
+  return (
+    <Button
+      ref={draggable.setNodeRef}
+      variant={'outline'}
+      className={cn(
+        'flex flex-col gap-2 w-[120px] h-[120px] cursor-grab',
+        draggable.isDragging && 'ring-2 ring-primary'
+      )}
+      {...draggable.listeners}
+      {...draggable.attributes}
+    >
+      <Icon className="size-8 text-primary" />
+      <p className="text-xs">{label}</p>
+    </Button>
+  )
+}
+
+export function SidebarBtnElementsDragOverlay({
+  formElement,
+}: {
+  formElement: FormElement
+}) {
+  const { icon: Icon, label } = formElement.designerBtnElement
+
+  return (
+    <Button
+      variant={'outline'}
+      className={cn('flex flex-col gap-2 w-[120px] h-[120px] cursor-grab')}
+    >
+      <Icon className="size-8 text-primary" />
+      <p className="text-xs">{label}</p>
+    </Button>
+  )
+}
